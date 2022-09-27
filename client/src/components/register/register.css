@@ -1,0 +1,51 @@
+/* Register page */
+
+
+a{
+  font-weight: bold;
+  color: grey;
+  text-decoration: none;
+
+}
+
+
+#floatingPassword, #floatingInput, #floatingFile{
+  background-color: rgba(65,53,53,0.14813258066898638);
+  border: 2px solid #2d4964;
+  color: white;
+}
+
+h1.h3{
+  font-family: 'Rubik', sans-serif;
+  text-align: center;
+}
+
+.showbtn{
+  position: absolute;
+  top: 22%;
+  right: 20px;
+  background-color: transparent;
+  z-index: 0;
+  border: 0;
+  display: none;
+}
+
+.form-signin{
+  color: white;
+  width: 30%;
+  margin: 50px auto;
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  z-index: 1
+}
+
+.signinbtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.gotologin{
+  text-align: center;
+}

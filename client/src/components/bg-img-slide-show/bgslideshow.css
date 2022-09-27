@@ -1,0 +1,24 @@
+
+.bgslideshow{
+  width: 100%;
+}
+
+.carousel{
+  /* position: fixed; */
+  width: inherit;
+}
+
+.imgvh {
+  width: inherit;
+  height: 100vh;
+  /* filter: brightness(40%); */
+  animation-name: example;
+  animation-duration: 5s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes example {
+  from {filter: brightness(20%);}
+  to {filter: brightness(60%);}
+}

@@ -1,0 +1,41 @@
+
+.selectionContainer{
+  /* border: 2px solid red; */
+  width: 50%;
+  margin: 0 auto;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  z-index: 1
+}
+
+.btnContainer{
+  /* border: 1px solid white; */
+  width: 70%;
+  margin: 20px auto;
+}
+
+.btnContainer button{
+  width: 100%;
+  margin: 10px auto;
+  border: 2px solid green;
+  transform: skew(-20deg);
+  /* background: transparent; */
+  color: white;
+}
+
+.btn:hover{
+  /* background-color: transparent; */
+
+  border-color: lightgreen;
+  color: white;
+}
+
+a{
+  width: 100%;
+}
+
+.welcome{
+  text-align: center;
+  color: white;
+}

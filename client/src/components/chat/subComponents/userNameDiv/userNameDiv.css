@@ -1,0 +1,10 @@
+.usernamediv{
+  border: 2px solid yellow;
+  border-radius: 10px;
+  margin: 10% auto;
+}
+
+.usernamediv > img{
+  width: 30%;
+  border-radius: 50%;
+}
