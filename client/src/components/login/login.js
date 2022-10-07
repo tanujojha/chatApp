@@ -11,7 +11,7 @@ const top = "Hello";
 function Login(){
 
   const context = useContext(someContext);
-  const {isLogged, setIsLogged} = context;
+  const {users} = context;
 
   const navigate = useNavigate();
 
@@ -28,16 +28,18 @@ function Login(){
 
   async function handelSubmit(e){
     e.preventDefault();
-    await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, credentials)
+
+    //options for CORS to pass cookies
+    const option = {
+      withCredentials: true
+    }
+    await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, credentials, option)
     .then(async (res)=>{
-
-        setIsLogged(true)
-        navigate("/chat")
-
+        console.log(res);
+        navigate("/chat")   //navigating to /chat route and in chat component we call getchat to send get req to root route of /chat and then render the page
     })
     .catch((error)=>{
-      // navigate("/login")         you can put it here but its as same as not putting it there
-      alert("wrong credentials")
+      alert("wrong credentials")    //alert pop-up with message
       console.log(error);
     })
 

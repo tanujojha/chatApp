@@ -2,18 +2,21 @@ import './chat.css';
 import UserNameDiv from './subComponents/userNameDiv/userNameDiv';
 import someContext from '../../context/context';
 import {useContext, useEffect} from 'react';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-
+import MainRightPaneDiv from "./subComponents/mainRightPaneDiv/mainRightPaneDiv"
+import OptionRightPaneDiv from "./subComponents/optionRightPaneDiv/optionRightPaneDiv"
 
 function Chat(){
 
   const context = useContext(someContext);
-  const {getAllUsers, users, user} = context;
+  const {users, clickedUser, getChat} = context;
 
+
+//we call getChat here so that the page renders only after checking for login auth through cookie
+//we use useEffect to only call it once otherwise it keeps on calling(infinite)
   useEffect(()=>{
-    getAllUsers();
+    getChat();  //calling getChat
+  },[])
 
-  }, [])
 
   return(
     <div className= "outer container-fluid " style = {{border: "2px solid white"}}>
@@ -26,47 +29,14 @@ function Chat(){
       <div className= "inner row" style = {{border: "2px solid red"}}>
 
         <div className = "leftpane col-2" style = {{border: "2px solid green"}}>
-          {users.map((item)=>{return <UserNameDiv key = {user.id} user = {item}/>})}
+          {/*mapping each user from users*/}
+          {users.map((item)=>{return <UserNameDiv key = {item._id} user = {item}/>})}
         </div>
 
-        <div className = "rightpane col" style = {{border: "2px solid yellow"}}>
-
-            <div className = "buddy-functionDiv " style = {{border: "2px solid blue"}}>
-              <div className = "buddydiv d-flex" style = {{border: "2px solid white"}}>
-                <img className = "buddyimg" src = "persons/1.jpeg" alt = "profile pic"/>
-                <h5 className = "buddyname"> {user.userName}</h5>
-              </div>
-              <div className = "functiondiv d-flex" style = {{border: "2px solid green"}}>
-                <AttachFileIcon/>
-                <AttachFileIcon/>
-              </div>
-            </div>
-
-            <div className = "messagediv" style = {{border: "2px solid white"}}>
-
-              <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-                <p> whats up man </p>
-              </div>
-              <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-                <p> fuck you  </p>
-              </div>
-              <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-                <p> what the hell </p>
-              </div>
-              <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-                <p> nothing fuck you  </p>
-              </div>
-
-              <div className = "formdiv, continer" style = {{border: "2px solid green"}}>
-                <form className= "form-group" style = {{border: "2px solid red"}}>
-                  <input className= "form-control" type = "text" name = "message" />
-                  <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-              </div>
-
-            </div>
-
-        </div>
+        {/*checking for clicks on any user to chat
+        at first it renders the optionRightPaneDiv but when any click is detected on any user in the left column
+        then it sets the main right div*/}
+        {clickedUser.status == true ? <MainRightPaneDiv/> : <OptionRightPaneDiv/>}
 
       </div>
 

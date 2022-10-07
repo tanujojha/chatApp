@@ -8,20 +8,13 @@ import SomeState from './context/someState';
 function App() {
 
   return (
-
-    <SomeState>
-      <BrowserRouter>
+    <BrowserRouter>
+      <SomeState>
         <Prelog/>
-        
-      </BrowserRouter>
-    </SomeState>
+      </SomeState>
+    </BrowserRouter>
 
   );
 }
 
 export default App;
-
-// <BrowserRouter>
-//   <Prelog/>
-//
-// </BrowserRouter>

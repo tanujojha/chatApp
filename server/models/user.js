@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     unique: true
   },
 
-  profile:{
+  profilePic:{
     type: String,
   }
   // date: {

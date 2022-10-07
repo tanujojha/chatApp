@@ -1,55 +1,33 @@
 require("dotenv").config();
 const router = require('express').Router();
-const multer = require('multer');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fetchUser = require('./middlewares/fetchUser');
-const {uploadProfile, test, up} = require('./middlewares/multer');
+const {uploadProfile} = require('./middlewares/multer');
 const User = require('./models/user');
+
 
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(bodyParser.json())
+// router.use(cookieParser())
 
 
 //register
-const storage = multer.diskStorage({
-  destination: (req, file, cb) =>{
-    cb(null, "public/profile")
-  },
-  filename: (req, file, cb) =>{
-    cb(null, req.body.name)
-  }
-});
+//uploadProfile().single is a multer method to upload single file
+router.post("/register", uploadProfile().single("file"), async(req, res)=>{
 
-const filter = (req, file, cb)=>{
-  const extn = file.mimetype.split("/")[1];
-  if(extn === "png" || extn === "jpg" || extn === "jpeg"){
-    cb(null, true)
-  }else{
-    cb(new Error("Not a image File!!!"), false)
-  }
-}
-const upload = multer({storage: storage, fileFilter: filter});
-
-router.post("/upload", upload.single("file"), async(req, res)=>{
-  console.log(req.file);
-  try{
+  if(req.file){     //checking for a file in incomming req on /auth/register
+    console.log("file uploaded successfully");
     return res.status(200).send("file uploaded succesfully")
-  } catch(err){
-    console.log(err);
   }
 
-})
-
-router.post("/register", async(req, res)=>{
-  // console.log(up().filter);
-  console.log(req.file);
-  // console.log(test());
   try {
 
-    const emailExixts = await User.findOne({email: req.body.email});
-    const userNameExists = await User.findOne({userName: req.body.userName});
+    const emailExixts = await User.findOne({email: req.body.email});    //checking for email in DB
+    const userNameExists = await User.findOne({userName: req.body.userName}); //checking for userName in DB
+
+    //if any of them is true throw error
     if(emailExixts || userNameExists){
       return res.status(400).send("Enter different email or user name")
     }
@@ -61,7 +39,8 @@ router.post("/register", async(req, res)=>{
     const newUser = new User({
       userName: req.body.userName,
       email: req.body.email,
-      password: hashedPassword
+      password: hashedPassword,
+      profilePic: req.body.profilePic
     });
 
     //save user
@@ -75,7 +54,12 @@ router.post("/register", async(req, res)=>{
 
     //sign with jwt and respond
     const authToken = jwt.sign(payload, process.env.jwtSecret,{expiresIn: "1h"})
-    return res.status(200).send({user, message: "registered succesfully", authToken: authToken});
+
+    //creating cookie with res.cookie and passing options
+    //later pass maxAge too as option
+    res.cookie("jwtToken", authToken, {sameSite: "lax", secure: true, httpOnly: true});
+    console.log("Registered succesfully");
+    return res.status(200).send({user, message: "registered succesfully"});
 
   } catch (e) {
     res.status(500).json(e)
@@ -96,7 +80,7 @@ router.post("/login", async (req, res)=>{
       return res.status(400).send("no such user exists")
     }
 
-    //validate password
+    //validate password with brypt
     const validatePassword = await bcrypt.compare(req.body.password, user.password);
     if(!validatePassword){
       return  res.status(400).send("wrong password");
@@ -109,8 +93,12 @@ router.post("/login", async (req, res)=>{
     };
 
     //sign with jwt and respond
-    const authToken = jwt.sign(payload, process.env.jwtSecret, {expiresIn: "1h"})
-    return res.status(200).json({user, message: "logged in successfully", authToken: authToken})
+    const authToken = jwt.sign(payload, process.env.jwtSecret );  //{expiresIn: "1h"}
+
+    //creating cookie with res.cookie and passing options
+    //later pass maxAge too as option
+    res.cookie("jwtToken", authToken, {sameSite: "lax", secure: true, httpOnly: true});
+    return res.status(200).json({user, message: "logged in successfully"})
 
   } catch (e) {
     res.status(500).json(e)
@@ -119,13 +107,17 @@ router.post("/login", async (req, res)=>{
 
 });
 
+//FOR TESTING PURPOSE
+
 //get a user
 router.get("/getuser", fetchUser, async (req,res)=>{
 
   try {
 
+    //getting a user id from req.user sent from the fetchUser middleware
     const userId = req.user.id
-    // const user = await User.findById(userId).select("-password")
+
+    //finding user in DB from user id
     const user = await User.findById(userId).select({"password":0, "__v":0})
     console.log("user" + user);
     return res.json(user)

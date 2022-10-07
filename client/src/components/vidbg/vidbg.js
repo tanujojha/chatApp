@@ -6,9 +6,9 @@ import Login from '.././login/login.js';
 function Vidbg(){
 
   useEffect(()=>{
-    $(function(){
+  
       $(".video").trigger("play")
-    })
+
   },[])
 
   return (
@@ -18,7 +18,7 @@ function Vidbg(){
           <source src ="background-images/tree-vid.mp4" type = "video/mp4" />
         </video>
       </div>
-    
+
     </section>
   )
 }
