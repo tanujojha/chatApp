@@ -28,16 +28,16 @@ function MainRightPaneDiv(){
         <div className = "messagediv" style = {{border: "2px solid white"}}>
 
           <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-            <p> whats up man </p>
+            <p>Hello Tom</p>
           </div>
           <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-            <p> fuck you  </p>
+            <p>Hello Dick</p>
           </div>
           <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-            <p> what the hell </p>
+            <p>What's up</p>
           </div>
           <div className = "textdiv container-fluid" style = {{border: "2px solid red"}}>
-            <p> nothing fuck you  </p>
+            <p>Coding</p>
           </div>
 
           <div className = "formdiv, continer" style = {{border: "2px solid green"}}>
